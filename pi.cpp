@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include "mpi.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,20 +38,20 @@ void getSlicesToCompute(const int *slices, const int *rank, const int *size, int
 }
 
 //function to integrate
-long double function(const long double *x) {
-	return 4L/(1L+(*x)*(*x));
+double function(const double *x) {
+	return 4/(1+(*x)*(*x));
 }
 
-long double integrate(const int *n, const int *first, const int *last) {
-	const long double A = 0;
-	const long double B = 1;
+double integrate(const int *n, const int *first, const int *last) {
+	const double A = 0;
+	const double B = 1;
 	
-	long double result = 0;
-	long double h = (B-A)/ *n;
+	double result = 0;
+	double h = (B-A)/ *n;
 
 	for (int i = *first; i <= *last; i++) {
-		long double x1 = (i-1)*h + A;
-		long double x2 = i*h + A;
+		double x1 = (i-1)*h + A;
+		double x2 = i*h + A;
 		result += (function(&x1) + function(&x2))*(h/2);
 	}	
 	
@@ -75,15 +76,14 @@ int main(int argc, char *argv[]) {
 	int first, last;
 	getSlicesToCompute(&slices, &rank, &size, &first, &last);
 		
-	long double partialResult = integrate(&slices, &first, &last);
+	double partialResult = integrate(&slices, &first, &last);
 	
-	long double result;
+	double result;
     MPI_Reduce(&partialResult, &result, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 	
-	cout.precision(30); //12 digits after decimal point, since pi = 3.14xxxxx
 	if (!rank) {
 		double time = MPI_Wtime() - start;
-		cout << "Process " << rank << " computed " << result << " in " << time << " s " << endl;	
+		cout << setprecision (12) << fixed << "Process " << rank << " computed " << result << " in " << time << " s " << endl;
 	}	
 	MPI_Finalize();
 	return 0; 
