@@ -33,8 +33,7 @@ void getSlicesToCompute(const int *slices, const int *rank, const int *size, int
 	}
 	else {
 		*last = *slices;
-	}		
-	//cout << "Process " << *rank << " will compute slices " << *first << " - " << *last << endl;
+	}
 }
 
 //function to integrate
