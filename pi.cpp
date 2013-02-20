@@ -22,7 +22,6 @@ int init(int *argc, char *argv[]) {
 void getRankAndSize(int *rank, int *size) {
 	MPI_Comm_rank(MPI_COMM_WORLD, rank);
 	MPI_Comm_size(MPI_COMM_WORLD, size);
-	//cout << "[" << *rank << "] of " << *size << " processes reporting!" << endl;
 }
 
 void getSlicesToCompute(const int *slices, const int *rank, const int *size, int *first, int *last) {
@@ -81,7 +80,7 @@ int main(int argc, char *argv[]) {
 	double result;
     MPI_Reduce(&partialResult, &result, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 	
-	cout.precision(12);
+	cout.precision(13); //12 digits after decimal point, since pi = 3.14xxxxx
 	if (!rank) {
 		double time = MPI_Wtime() - start;
 		cout << "Process " << rank << " computed " << result << " in " << time << " s " << endl;	
