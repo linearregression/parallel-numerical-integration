@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
 	double result;
     MPI_Reduce(&partialResult, &result, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
 	
-	cout.precision(13); //12 digits after decimal point, since pi = 3.14xxxxx
+	cout.precision(15); //12 digits after decimal point, since pi = 3.14xxxxx
 	if (!rank) {
 		double time = MPI_Wtime() - start;
 		cout << "Process " << rank << " computed " << result << " in " << time << " s " << endl;	
